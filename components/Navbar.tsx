@@ -16,7 +16,7 @@ const Navbar = () => {
       <div className='flex flex-row gap-3 items-center'>
         <div className='relative'>
           <Image
-          src="/horseLogo.jpg"
+          src="/me.jpg"
           alt="logo"
           width={40}
           height={40}
@@ -24,7 +24,7 @@ const Navbar = () => {
           />
          </div> 
        <h1 className='text-white text-[30px] font-semibold '>Front end 
-       <span className='text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-red-500'> 
+       <span className='text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-500'> 
               {" "}
               Developer
               </span>
