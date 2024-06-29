@@ -9,7 +9,7 @@ interface Project {
 const projects: Project[] = [
   {
     title: 'Bnsd Clothes',
-    description: 'Ecommerce website for a clothing',
+    description: 'Ecommerce website for clothing',
     image: '/project1.jpg',
   },
   {
@@ -22,7 +22,7 @@ const projects: Project[] = [
     description: 'Descripción del proyecto 3',
     image: '/project3.jpg',
   },
-  // Añadir más proyectos según sea necesario
+  // añadir aqui mas proyectos
 ];
 
 const ProjectCard: React.FC<Project> = ({ title, description, image }) => (
@@ -50,10 +50,6 @@ const Page: React.FC = () => {
             image={project.image}
           />
         ))}
-    style={{backgroundImage:"url(/bcn1.jpg)"}}
-     className='w-screen h-screen flex items center justify-center bg-center bg-cover'>
-      <div className='grid grid-cols-2 gap-5 max-w-[90%] max-h-[90%]/'>
-
       </div>
     </div>
   );
