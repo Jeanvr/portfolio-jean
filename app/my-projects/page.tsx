@@ -1,4 +1,5 @@
 import React from 'react';
+import ProjectCard from '@/components/ProjectCard';
 
 interface Project {
   title: string;
@@ -24,16 +25,6 @@ const projects: Project[] = [
   },
   // añadir aqui mas proyectos
 ];
-
-const ProjectCard: React.FC<Project> = ({ title, description, image }) => (
-  <div className="bg-white bg-opacity-80 rounded-lg shadow-lg overflow-hidden transform transition-transform hover:scale-105">
-    <div className="bg-cover bg-center h-48" style={{ backgroundImage: `url(${image})` }}></div>
-    <div className="p-5">
-      <h2 className="text-2xl font-bold mb-2">{title}</h2>
-      <p className="text-gray-700">{description}</p>
-    </div>
-  </div>
-);
 
 const Page: React.FC = () => {
   return (
