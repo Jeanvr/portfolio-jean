@@ -14,7 +14,7 @@ const Page: React.FC = () => {
         </div>
         <h1 className="text-2xl font-bold mb-2">About Me</h1>
         <p className="text-gray-700 mb-4">
-          Hi, I'm Jean. I'm a passionate web developer with experience in creating dynamic and responsive web applications. I love working with modern web technologies and continuously improving my skills,for more about me give me a email!
+          Hi, I&apos;m Jean. I&apos;m a passionate web developer with experience in creating dynamic and responsive web applications. I love working with modern web technologies and continuously improving my skills,for more about me give me a email!
         </p>
       </div>
       <div className="w-full flex justify-center">
