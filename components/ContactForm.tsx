@@ -1,18 +1,18 @@
 "use client";
 
-import emailjs from '@emailjs/browser';
-import React, { useRef, useState } from 'react';
+import emailjs from "@emailjs/browser";
+import React, { useRef, useState } from "react";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const ContactForm: React.FC = () => {
   const formRef = useRef<HTMLFormElement>(null);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -25,37 +25,37 @@ const ContactForm: React.FC = () => {
     const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
     const form = formRef.current;
 
-    setError('');
+    setError("");
     setSuccess(false);
 
     if (!trimmedName) {
-      setError('Name is required.');
+      setError("Tu nombre es obligatorio.");
       return;
     }
 
     if (!trimmedEmail || !EMAIL_REGEX.test(trimmedEmail)) {
-      setError('Please enter a valid email address.');
+      setError("Introduce un email valido.");
       return;
     }
 
     if (!trimmedMessage) {
-      setError('Message is required.');
+      setError("El mensaje no puede estar vacio.");
       return;
     }
 
     if (!form) {
-      console.error('EmailJS form ref is not available.');
-      setError('The contact form is not ready yet. Please try again.');
+      console.error("EmailJS form ref is not available.");
+      setError("El formulario todavia no esta listo. Intentalo de nuevo.");
       return;
     }
 
     if (!serviceId || !templateId || !publicKey) {
-      console.error('EmailJS configuration is missing.', {
+      console.error("EmailJS configuration is missing.", {
         hasServiceId: Boolean(serviceId),
         hasTemplateId: Boolean(templateId),
         hasPublicKey: Boolean(publicKey),
       });
-      setError('Email service is not configured.');
+      setError("El servicio de correo no esta configurado.");
       return;
     }
 
@@ -63,9 +63,9 @@ const ContactForm: React.FC = () => {
     setEmail(trimmedEmail);
     setMessage(trimmedMessage);
 
-    const nameField = form.elements.namedItem('user_name') as HTMLInputElement | null;
-    const emailField = form.elements.namedItem('user_email') as HTMLInputElement | null;
-    const messageField = form.elements.namedItem('message') as HTMLTextAreaElement | null;
+    const nameField = form.elements.namedItem("user_name") as HTMLInputElement | null;
+    const emailField = form.elements.namedItem("user_email") as HTMLInputElement | null;
+    const messageField = form.elements.namedItem("message") as HTMLTextAreaElement | null;
 
     if (nameField) {
       nameField.value = trimmedName;
@@ -79,94 +79,102 @@ const ContactForm: React.FC = () => {
       messageField.value = trimmedMessage;
     }
 
-    console.debug('EmailJS sendForm starting.', {
-      hasServiceId: Boolean(serviceId),
-      hasTemplateId: Boolean(templateId),
-      hasPublicKey: Boolean(publicKey),
-      fieldNames: ['user_name', 'user_email', 'message'],
-    });
-
     setSending(true);
 
     try {
-      const response = await emailjs.sendForm(
-        serviceId,
-        templateId,
-        form,
-        {
-          publicKey,
-        }
-      );
-      console.info('EmailJS sendForm succeeded.', {
-        status: response.status,
-        text: response.text,
+      await emailjs.sendForm(serviceId, templateId, form, {
+        publicKey,
       });
       setSuccess(true);
-      setName('');
-      setEmail('');
-      setMessage('');
-    } catch (error: unknown) {
-      const emailJsError = error as { status?: number; text?: string };
+      setName("");
+      setEmail("");
+      setMessage("");
+    } catch (submitError: unknown) {
+      const emailJsError = submitError as { status?: number; text?: string };
 
-      console.error('EmailJS sendForm failed.', {
+      console.error("EmailJS sendForm failed.", {
         status: emailJsError?.status,
         text: emailJsError?.text,
-        error,
+        error: submitError,
       });
-      setError('We could not send your message right now. Please try again later.');
+      setError("No se pudo enviar el mensaje ahora mismo. Prueba de nuevo mas tarde.");
     } finally {
       setSending(false);
     }
   };
 
   return (
-    <div className="p-4 bg-white rounded-lg shadow-md max-w-md mx-auto">
-      <h2 className="text-2xl font-bold mb-2">Contact Me</h2>
-      <form ref={formRef} onSubmit={handleSubmit} className="space-y-4" noValidate>
+    <div className="rounded-[28px] bg-slate-950/50 p-4 sm:p-6">
+      <h2 className="text-2xl font-semibold text-white">Escribeme</h2>
+      <p className="mt-2 text-sm leading-7 text-slate-300">
+        Cuentame el tipo de proyecto, rol o entrevista que quieres comentar.
+      </p>
+
+      <form ref={formRef} onSubmit={handleSubmit} className="mt-6 space-y-4" noValidate>
         <div className="flex flex-col">
-          <label htmlFor="name" className="mb-2">Name:</label>
+          <label htmlFor="name" className="mb-2 text-sm font-medium text-slate-200">
+            Nombre
+          </label>
           <input
             type="text"
             id="name"
             name="user_name"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(event) => setName(event.target.value)}
+            autoComplete="name"
             required
-            className="p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="rounded-2xl border border-white/10 bg-white/5 p-3 text-white placeholder:text-slate-500 focus:border-emerald-400 focus:outline-none"
+            placeholder="Tu nombre"
           />
         </div>
+
         <div className="flex flex-col">
-          <label htmlFor="email" className="mb-2">Email:</label>
+          <label htmlFor="email" className="mb-2 text-sm font-medium text-slate-200">
+            Email
+          </label>
           <input
             type="email"
             id="email"
             name="user_email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(event) => setEmail(event.target.value)}
+            autoComplete="email"
             required
-            className="p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="rounded-2xl border border-white/10 bg-white/5 p-3 text-white placeholder:text-slate-500 focus:border-emerald-400 focus:outline-none"
+            placeholder="tu@email.com"
           />
         </div>
+
         <div className="flex flex-col">
-          <label htmlFor="message" className="mb-2">Message:</label>
+          <label htmlFor="message" className="mb-2 text-sm font-medium text-slate-200">
+            Mensaje
+          </label>
           <textarea
             id="message"
             name="message"
             value={message}
-            onChange={(e) => setMessage(e.target.value)}
+            onChange={(event) => setMessage(event.target.value)}
             required
-            className="p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            rows={6}
+            className="rounded-2xl border border-white/10 bg-white/5 p-3 text-white placeholder:text-slate-500 focus:border-emerald-400 focus:outline-none"
+            placeholder="Cuentame el proyecto, el rol o la entrevista que quieres comentar."
           />
         </div>
+
         <button
           type="submit"
-          className={`w-full p-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 ${sending ? 'opacity-50' : ''}`}
+          className={`w-full rounded-2xl bg-emerald-400 p-3 font-semibold text-slate-950 transition hover:bg-emerald-300 ${
+            sending ? "cursor-not-allowed opacity-60" : ""
+          }`}
           disabled={sending}
         >
-          {sending ? 'Sending...' : 'Send'}
+          {sending ? "Enviando..." : "Enviar mensaje"}
         </button>
-        {success && <p className="text-green-500 mt-4">Message sent successfully!</p>}
-        {error && <p className="text-red-500 mt-4">{error}</p>}
+
+        <div aria-live="polite" className="min-h-6 text-sm">
+          {success && <p className="text-emerald-300">Mensaje enviado correctamente.</p>}
+          {error && <p className="text-rose-300">{error}</p>}
+        </div>
       </form>
     </div>
   );

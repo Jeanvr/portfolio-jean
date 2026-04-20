@@ -1,89 +1,219 @@
+import {
+  ArrowRight,
+  FileText,
+  FolderKanban,
+  Github,
+  Linkedin,
+  Mail,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { PersonalInfo } from "@/constants";
+
+const stack = [
+  "React",
+  "Next.js",
+  "TypeScript",
+  "Tailwind CSS",
+  "Accesibilidad",
+  "Performance",
+];
+
+const valuePoints = [
+  {
+    title: "Interfaces listas para producto",
+    description:
+      "Trabajo jerarquia visual, componentes reutilizables y estados claros para que el frontend ayude al negocio.",
+  },
+  {
+    title: "Criterio tecnico visible",
+    description:
+      "Cuido rendimiento, mantenibilidad y experiencia movil para que el portfolio no sea solo diseno, sino ejecucion real.",
+  },
+  {
+    title: "Colaboracion con intencion",
+    description:
+      "Pienso como parte del equipo: diseno, producto y desarrollo tienen que verse alineados desde la primera entrega.",
+  },
+];
+
+const quickLinks = [
+  {
+    label: "GitHub",
+    href: PersonalInfo.githubUrl,
+    icon: Github,
+  },
+  {
+    label: "LinkedIn",
+    href: PersonalInfo.linkedinUrl,
+    icon: Linkedin,
+  },
+  {
+    label: PersonalInfo.email,
+    href: `mailto:${PersonalInfo.email}`,
+    icon: Mail,
+  },
+];
 
 export default function Home() {
   return (
-    <main className='w-screen h-screen relative'>
-      <div className='flex items-center w-full h-full bg-cover bg-center' style={{ backgroundImage: "url(/main-bg.webp)" }}>
-        <div className='pl-20 md:pl-40 pb-56 md:pb-20 flex flex-col gap-5 z-[10] max-w-[750px]'>
-          <h1 className='text-[80px] text-white font-semibold'>
-            Haz todo posible con la
-            <span className='text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-500'>
-              {" "}
-              Programación!
-            </span>
-          </h1>
-          <h2 className='text-gray-200 hidden md:block'>
-            Codex te liberabit
-          </h2>
-          <div className='flex-col md:flex-row hidden md:flex gap-5'>
-            <Link href="/my-skills" legacyBehavior>
-              <a className='relative group rounded-[20px] bg-transparent border border-white px-5 py-3 text-lg text-white max-w-[200px] transition-all duration-300 ease-in-out transform hover:bg-white hover:text-black'>
-                Saber más
-              </a>
-            </Link>
-            <Link href="/my-projects" legacyBehavior>
-              <a className='relative group rounded-[20px] bg-transparent border border-white px-5 py-3 text-lg text-white max-w-[200px] transition-all duration-300 ease-in-out transform hover:bg-white hover:text-black'>
-                Mis proyectos
-              </a>
-            </Link>
-            <Link href="/contact-me" legacyBehavior>
-              <a className='relative group rounded-[20px] bg-transparent border border-white px-5 py-3 text-lg text-white max-w-[200px] transition-all duration-300 ease-in-out transform hover:bg-white hover:text-black'>
-                Contáctame
-              </a>
-            </Link>
+    <main className="relative overflow-hidden">
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(16,185,129,0.18),transparent_28%),radial-gradient(circle_at_80%_10%,rgba(14,165,233,0.18),transparent_22%),linear-gradient(180deg,#07111f_0%,#0b1729_55%,#08111d_100%)]" />
+
+      <section className="mx-auto max-w-7xl px-4 pb-14 pt-10 sm:px-6 lg:px-8 lg:pb-20 lg:pt-16">
+        <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+          <div className="max-w-3xl">
+            <p className="mb-4 inline-flex rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-sm font-medium text-emerald-200">
+              Disponible para oportunidades como Frontend Developer en 2026
+            </p>
+
+            <h1 className="max-w-4xl text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl">
+              Jean Carlo Vega
+              <span className="block bg-gradient-to-r from-emerald-300 via-sky-300 to-cyan-200 bg-clip-text text-transparent">
+                Frontend Developer enfocado en producto, UX y rendimiento.
+              </span>
+            </h1>
+
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300 sm:text-xl">
+              {PersonalInfo.summary} Convierto ideas en interfaces claras,
+              rapidas y preparadas para contratacion, validacion y crecimiento.
+            </p>
+
+            <div className="mt-8 flex flex-wrap gap-3">
+              {stack.map((item) => (
+                <span
+                  key={item}
+                  className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-200"
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
+
+            <div className="mt-10 flex flex-wrap gap-4">
+              <Link
+                href="/my-projects"
+                className="inline-flex items-center gap-2 rounded-full bg-emerald-400 px-5 py-3 font-semibold text-slate-950 transition hover:bg-emerald-300"
+              >
+                <FolderKanban className="h-5 w-5" aria-hidden="true" />
+                Ver proyectos
+              </Link>
+              <Link
+                href="/contact-me"
+                className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-3 font-semibold text-white transition hover:border-sky-300/40 hover:bg-white/10"
+              >
+                <Mail className="h-5 w-5" aria-hidden="true" />
+                Contacto
+              </Link>
+              <Link
+                href={PersonalInfo.resumePath}
+                className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-slate-900/80 px-5 py-3 font-semibold text-slate-100 transition hover:border-emerald-300/40 hover:bg-slate-800"
+              >
+                <FileText className="h-5 w-5" aria-hidden="true" />
+                Ver CV
+              </Link>
+            </div>
+
+            <div className="mt-10 flex flex-wrap gap-3">
+              {quickLinks.map((item) => {
+                const Icon = item.icon;
+
+                return (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-200 transition hover:border-cyan-300/40 hover:bg-white/10 hover:text-white"
+                    {...(item.href.startsWith("http")
+                      ? { target: "_blank", rel: "noreferrer" }
+                      : {})}
+                  >
+                    <Icon className="h-4 w-4" aria-hidden="true" />
+                    <span>{item.label}</span>
+                  </a>
+                );
+              })}
+            </div>
           </div>
+
+          <aside className="relative rounded-[32px] border border-white/10 bg-slate-900/75 p-6 shadow-2xl shadow-cyan-950/20 backdrop-blur">
+            <div className="flex items-center gap-4 border-b border-white/10 pb-5">
+              <Image
+                src="/me.jpg"
+                alt="Retrato de Jean Carlo Vega"
+                width={88}
+                height={88}
+                className="h-20 w-20 rounded-3xl border border-white/10 object-cover"
+                priority
+              />
+              <div>
+                <p className="text-sm uppercase tracking-[0.22em] text-sky-300/80">
+                  Perfil profesional
+                </p>
+                <h2 className="mt-1 text-2xl font-semibold text-white">
+                  Frontend con foco en contratacion
+                </h2>
+              </div>
+            </div>
+
+            <div className="mt-6 space-y-4">
+              <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-4">
+                <p className="text-sm font-semibold text-emerald-200">
+                  Stack principal
+                </p>
+                <p className="mt-2 text-sm leading-7 text-slate-300">
+                  React, Next.js, TypeScript, Tailwind CSS, Framer Motion y
+                  buenas practicas de accesibilidad, rendimiento y responsive
+                  design.
+                </p>
+              </div>
+
+              <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-4">
+                <p className="text-sm font-semibold text-sky-200">
+                  Propuesta de valor
+                </p>
+                <ul className="mt-3 space-y-3 text-sm leading-7 text-slate-300">
+                  <li className="flex gap-3">
+                    <span className="mt-2 h-2 w-2 rounded-full bg-emerald-300" />
+                    Interfaces claras que comunican mejor el producto.
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="mt-2 h-2 w-2 rounded-full bg-sky-300" />
+                    Decisiones visuales con criterio tecnico y mantenimiento.
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="mt-2 h-2 w-2 rounded-full bg-cyan-200" />
+                    Entregas orientadas a conversion, legibilidad y confianza.
+                  </li>
+                </ul>
+              </div>
+
+              <Link
+                href="/my-projects"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-200 transition hover:text-emerald-100"
+              >
+                Ver trabajo destacado
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            </div>
+          </aside>
         </div>
-      </div>
+      </section>
 
-      <div className='absolute flex bottom-10 z-[20] right-5 flex-col md:hidden gap-5'>
-        <Link href="/my-skills" legacyBehavior>
-          <a className='relative group rounded-[20px] bg-blue-500 px-5 py-3 text-lg text-white max-w-[200px] transition-all duration-300 ease-in-out transform hover:bg-blue-700'>
-            Saber más
-          </a>
-        </Link>
-        <Link href="/my-projects" legacyBehavior>
-          <a className='relative group rounded-[20px] bg-transparent border border-white px-5 py-3 text-lg text-white max-w-[200px] transition-all duration-300 ease-in-out transform hover:bg-white hover:text-black'>
-            Mis proyectos
-          </a>
-        </Link>
-        <Link href="/contact-me" legacyBehavior>
-          <a className='relative group rounded-[20px] bg-transparent border border-white px-5 py-3 text-lg text-white max-w-[200px] transition-all duration-300 ease-in-out transform hover:bg-white hover:text-black'>
-            Contáctame
-          </a>
-        </Link>
-      </div>
-
-      <div className="absolute bottom-0 right-0 z-[10]">
-        <Image
-          src="/horse.png"
-          alt="horse"
-          height={300}
-          width={300}
-          className="absolute right-55 top-40"
-          unoptimized
-        />
-        <Image src="/cliff.webp" alt="cliff" width={480} height={480} />
-      </div>
-
-      <div className="absolute bottom-0 z-[5] w-full h-full">
-        <Image
-          src="/trees.webp"
-          alt="trees"
-          width={2000}
-          height={2000}
-          className="w-full h-full"
-        />
-      </div>
-      <Image
-        src="/stars.png"
-        alt="stars"
-        width={2000}
-        height={2000}
-        className="absolute top-10 left-0 z-[10]"
-        unoptimized
-      />
+      <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
+        <div className="grid gap-4 md:grid-cols-3">
+          {valuePoints.map((item) => (
+            <article
+              key={item.title}
+              className="rounded-[28px] border border-white/10 bg-white/[0.04] p-6 backdrop-blur"
+            >
+              <p className="text-lg font-semibold text-white">{item.title}</p>
+              <p className="mt-3 text-sm leading-7 text-slate-300">
+                {item.description}
+              </p>
+            </article>
+          ))}
+        </div>
+      </section>
     </main>
   );
 }
-

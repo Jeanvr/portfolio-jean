@@ -1,49 +1,42 @@
-import React from 'react';
-import ProjectCard from '@/components/ProjectCard';
+import type { Metadata } from "next";
+import ProjectCard from "@/components/ProjectCard";
+import { Projects } from "@/constants";
 
-interface Project {
-  title: string;
-  description: string;
-  image: string;
-}
+export const metadata: Metadata = {
+  title: "Proyectos",
+  description:
+    "Seleccion de proyectos de frontend y UI desarrollados por Jean Carlo Vega.",
+};
 
-const projects: Project[] = [
-  {
-    title: 'Bnsd Clothes',
-    description: 'Ecommerce website for clothing',
-    image: '/project1.jpg',
-  },
-  {
-    title: 'Proyecto 2',
-    description: 'Descripción del proyecto 2',
-    image: '/project2.jpg',
-  },
-  {
-    title: 'Proyecto 3',
-    description: 'Descripción del proyecto 3',
-    image: '/project3.jpg',
-  },
-  // añadir aqui mas proyectos
-];
-
-const Page: React.FC = () => {
+const Page = () => {
   return (
-    <div
-      style={{ backgroundImage: "url(/Mountains.jpg)" }}
-      className='w-screen h-screen flex items-center justify-center bg-center bg-cover'
-    >
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-[90%] max-h-[90%]'>
-        {projects.map((project, index) => (
+    <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <section className="rounded-[32px] border border-white/10 bg-slate-900/70 p-8 backdrop-blur">
+        <p className="text-sm font-semibold uppercase tracking-[0.28em] text-emerald-300/80">
+          Proyectos
+        </p>
+        <h1 className="mt-3 text-4xl font-semibold text-white sm:text-5xl">
+          Trabajo visual con enfoque frontend
+        </h1>
+        <p className="mt-4 max-w-3xl text-base leading-8 text-slate-300 sm:text-lg">
+          Esta seleccion muestra el tipo de interfaces, direccion visual y
+          ejecucion que quiero llevar a producto: experiencias claras, modernas
+          y cuidadas tanto en escritorio como en movil.
+        </p>
+      </section>
+
+      <section className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        {Projects.map((project) => (
           <ProjectCard
-            key={index}
+            key={project.title}
             title={project.title}
-            description={project.description}
-            image={project.image}
+            description={project.text}
+            image={project.src}
           />
         ))}
-      </div>
-    </div>
+      </section>
+    </main>
   );
-}
+};
 
 export default Page;

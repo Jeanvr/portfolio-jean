@@ -1,77 +1,79 @@
-"use client"
-import React from 'react'
-import {Swiper,SwiperSlide} from 'swiper/react'
-import'swiper/css'
-import { SkillData } from '@/constants'
-import Image from 'next/image'
-import {Autoplay} from 'swiper/modules'
+"use client";
+
+import Image from "next/image";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
+import "swiper/css";
+import { SkillData } from "@/constants";
+
+const swiperBreakpoints = {
+  0: {
+    slidesPerView: 2.2,
+  },
+  640: {
+    slidesPerView: 3.2,
+  },
+  1024: {
+    slidesPerView: 5,
+  },
+};
 
 const Page = () => {
   return (
-    <div 
-    style={{backgroundImage:"url(/bg-2.jpg)"}}
-    className='h-screen w-screen flex flex-col justify-center items-center bg-cover bg-center'>
-      <div className='flex flex-col gap-20 max-w-[80%] text-center items-center'>
-        <div className='flex flex-col items-center gap-4'>
-          <h1 className='font-semibold text-white text-[50px]'>Habilidades<span className='text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-red-500'> 
-              {" "}
-              &
-              {" "}
-              </span>
-              Tecnologias
-              </h1>
-             <p className="text-gray-400 text-[20px]">
-              Usando los ultimos lenguajes del mercado
-             </p>
-        </div>
-         <Swiper
-          slidesPerView={5}
-          loop={true}
-          autoplay={{
-            delay:0,
-            disableOnInteraction:false
-          }}
-          speed={5000}
-          modules={[Autoplay]}
-          className='max-w-[100%]'
-          >
-            {SkillData.map((skill,index)=>(
-              <SwiperSlide key={index}>
-                <Image
-                src={skill.Image}
-                alt={skill.name}
-                width={skill.width}
-                height={skill.height}
-              />
-            </SwiperSlide>
-            ))}
-         </Swiper>
-         <Swiper
-          slidesPerView={5}
-          loop={true}
-          autoplay={{
-            delay:0,
-            disableOnInteraction:false,
-            reverseDirection: true
-          }}
-          speed={5000}
-          modules={[Autoplay]}
-          className='max-w-[80%]'
-          >
-            {SkillData.map((skill,index)=>(
-              <SwiperSlide key={index}>
-                <Image
-                src={skill.Image}
-                alt={skill.name}
-                width={skill.width}
-                height={skill.height}
-              />
-            </SwiperSlide>
-            ))}
-         </Swiper>
-      </div>
-    </div>
-  )
-}
+    <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <section className="rounded-[32px] border border-white/10 bg-slate-900/70 p-8 backdrop-blur">
+        <p className="text-sm font-semibold uppercase tracking-[0.28em] text-emerald-300/80">
+          Habilidades
+        </p>
+        <h1 className="mt-3 text-4xl font-semibold text-white sm:text-5xl">
+          Stack frontend para interfaces modernas
+        </h1>
+        <p className="mt-4 max-w-3xl text-base leading-8 text-slate-300 sm:text-lg">
+          Trabajo con un stack centrado en experiencia de usuario, claridad
+          visual y velocidad de desarrollo. Estas son las tecnologias que mejor
+          representan como construyo producto en frontend.
+        </p>
+      </section>
 
-export default Page
+      <section className="mt-6 space-y-6">
+        {[false, true].map((reverse) => (
+          <div
+            key={String(reverse)}
+            className="rounded-[28px] border border-white/10 bg-white/[0.04] p-4"
+          >
+            <Swiper
+              breakpoints={swiperBreakpoints}
+              loop
+              autoplay={{
+                delay: 0,
+                disableOnInteraction: false,
+                reverseDirection: reverse,
+              }}
+              speed={5000}
+              modules={[Autoplay]}
+              className="max-w-full"
+            >
+              {SkillData.map((skill) => (
+                <SwiperSlide key={`${skill.name}-${reverse ? "reverse" : "forward"}`}>
+                  <div className="flex h-full min-h-28 items-center justify-center gap-3 rounded-3xl border border-white/10 bg-slate-950/45 px-4 py-5">
+                    <Image
+                      src={skill.Image}
+                      alt={skill.name}
+                      width={skill.width}
+                      height={skill.height}
+                    />
+                    <span className="text-sm font-medium text-slate-200">
+                      {skill.name}
+                    </span>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        ))}
+      </section>
+    </main>
+  );
+};
+
+export default Page;

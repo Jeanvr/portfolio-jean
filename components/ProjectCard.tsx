@@ -1,4 +1,4 @@
-import React from 'react';
+import Image from "next/image";
 
 interface ProjectCardProps {
   title: string;
@@ -6,14 +6,26 @@ interface ProjectCardProps {
   image: string;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ title, description, image }) => (
-  <div className="bg-white bg-opacity-80 rounded-lg shadow-lg overflow-hidden transform transition-transform hover:scale-105">
-    <div className="bg-cover bg-center h-48" style={{ backgroundImage: `url(${image})` }}></div>
-    <div className="p-5">
-      <h2 className="text-2xl font-bold mb-2">{title}</h2>
-      <p className="text-gray-700">{description}</p>
+const ProjectCard: React.FC<ProjectCardProps> = ({
+  title,
+  description,
+  image,
+}) => (
+  <article className="overflow-hidden rounded-[28px] border border-white/10 bg-slate-900/75 shadow-xl shadow-slate-950/25 transition hover:-translate-y-1">
+    <div className="relative aspect-[16/10] overflow-hidden border-b border-white/10">
+      <Image
+        src={image}
+        alt={`Vista previa del proyecto ${title}`}
+        fill
+        className="object-cover"
+        sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+      />
     </div>
-  </div>
+    <div className="p-5">
+      <h2 className="text-2xl font-semibold text-white">{title}</h2>
+      <p className="mt-3 text-sm leading-7 text-slate-300">{description}</p>
+    </div>
+  </article>
 );
 
 export default ProjectCard;
