@@ -2,17 +2,38 @@
 
 import emailjs from "@emailjs/browser";
 import React, { useRef, useState } from "react";
+import { bindHoverLift, setupGsap, useGSAP } from "@/lib/gsap";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const ContactForm: React.FC = () => {
   const formRef = useRef<HTMLFormElement>(null);
+  const submitButtonRef = useRef<HTMLButtonElement>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+
+  useGSAP(
+    () => {
+      setupGsap();
+
+      const button = submitButtonRef.current;
+
+      if (!button) {
+        return;
+      }
+
+      return bindHoverLift([button], {
+        y: -2,
+        scale: 1.01,
+        boxShadow: "0 18px 38px rgba(16, 185, 129, 0.2)",
+      });
+    },
+    { scope: formRef },
+  );
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -162,6 +183,7 @@ const ContactForm: React.FC = () => {
         </div>
 
         <button
+          ref={submitButtonRef}
           type="submit"
           className={`w-full rounded-2xl bg-emerald-400 p-3 font-semibold text-slate-950 transition hover:bg-emerald-300 ${
             sending ? "cursor-not-allowed opacity-60" : ""

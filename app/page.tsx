@@ -1,3 +1,5 @@
+"use client";
+
 import {
   ArrowRight,
   FileText,
@@ -8,7 +10,10 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRef } from "react";
+import Reveal from "@/components/Reveal";
 import { PersonalInfo } from "@/constants";
+import { bindHoverLift, gsap, prefersReducedMotion, setupGsap, useGSAP } from "@/lib/gsap";
 
 const stack = [
   "React",
@@ -56,31 +61,131 @@ const quickLinks = [
 ];
 
 export default function Home() {
+  const rootRef = useRef<HTMLElement | null>(null);
+  const titleRef = useRef<HTMLHeadingElement | null>(null);
+  const descriptionRef = useRef<HTMLParagraphElement | null>(null);
+  const tagsRef = useRef<HTMLDivElement | null>(null);
+  const ctasRef = useRef<HTMLDivElement | null>(null);
+  const quickLinksRef = useRef<HTMLDivElement | null>(null);
+  const asideRef = useRef<HTMLElement | null>(null);
+
+  useGSAP(
+    () => {
+      setupGsap();
+
+      const hoverTargets = gsap.utils.toArray<HTMLElement>("[data-home-hover]");
+      const cleanupHover = bindHoverLift(hoverTargets, {
+        y: -4,
+        scale: 1.012,
+        boxShadow: "0 18px 40px rgba(2, 6, 23, 0.22)",
+      });
+
+      if (prefersReducedMotion()) {
+        return () => {
+          cleanupHover();
+        };
+      }
+
+      const tagItems = Array.from(tagsRef.current?.children ?? []);
+      const ctaItems = Array.from(ctasRef.current?.children ?? []);
+      const quickLinkItems = Array.from(quickLinksRef.current?.children ?? []);
+
+      gsap
+        .timeline({
+          defaults: {
+            ease: "power3.out",
+          },
+        })
+        .from(titleRef.current, {
+          y: 34,
+          autoAlpha: 0,
+          duration: 0.82,
+        })
+        .from(
+          descriptionRef.current,
+          {
+            y: 22,
+            autoAlpha: 0,
+            duration: 0.68,
+          },
+          "-=0.48",
+        )
+        .from(
+          tagItems,
+          {
+            y: 18,
+            autoAlpha: 0,
+            duration: 0.44,
+            stagger: 0.05,
+          },
+          "-=0.38",
+        )
+        .from(
+          ctaItems,
+          {
+            y: 16,
+            autoAlpha: 0,
+            duration: 0.48,
+            stagger: 0.06,
+          },
+          "-=0.3",
+        )
+        .from(
+          quickLinkItems,
+          {
+            y: 14,
+            autoAlpha: 0,
+            duration: 0.4,
+            stagger: 0.05,
+          },
+          "-=0.28",
+        )
+        .from(
+          asideRef.current,
+          {
+            y: 28,
+            autoAlpha: 0,
+            scale: 0.985,
+            duration: 0.82,
+          },
+          "<0.14",
+        );
+
+      return () => {
+        cleanupHover();
+      };
+    },
+    { scope: rootRef },
+  );
+
   return (
-    <main className="relative overflow-hidden">
+    <main ref={rootRef} className="relative overflow-hidden">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(16,185,129,0.18),transparent_28%),radial-gradient(circle_at_80%_10%,rgba(14,165,233,0.18),transparent_22%),linear-gradient(180deg,#07111f_0%,#0b1729_55%,#08111d_100%)]" />
 
       <section className="mx-auto max-w-7xl px-4 pb-14 pt-10 sm:px-6 lg:px-8 lg:pb-20 lg:pt-16">
-        <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+        <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-start xl:items-center">
           <div className="max-w-3xl">
-            <p className="mb-4 inline-flex rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-sm font-medium text-emerald-200">
-              Disponible para oportunidades como Frontend Developer en 2026
-            </p>
-
-            <h1 className="max-w-4xl text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl">
+            
+            <h1
+              ref={titleRef}
+              className="max-w-4xl text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl"
+            >
               Jean Carlo Vega
               <span className="block bg-gradient-to-r from-emerald-300 via-sky-300 to-cyan-200 bg-clip-text text-transparent">
                 Frontend Developer enfocado en producto, UX y rendimiento.
               </span>
             </h1>
 
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300 sm:text-xl">
+            <p
+              ref={descriptionRef}
+              className="mt-6 max-w-2xl text-lg leading-8 text-slate-300 sm:text-xl"
+            >
               {PersonalInfo.summary} Convierto ideas en interfaces claras,
               rapidas y preparadas para contratacion, validacion y crecimiento.
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-3">
-              {stack.map((item) => (
+            <div ref={tagsRef} className="mt-8 flex flex-wrap gap-3">
+              {stack.filter((item) => item !== "Performance").map((item) => (
                 <span
                   key={item}
                   className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-200"
@@ -90,9 +195,10 @@ export default function Home() {
               ))}
             </div>
 
-            <div className="mt-10 flex flex-wrap gap-4">
+            <div ref={ctasRef} className="mt-10 flex flex-wrap gap-4">
               <Link
                 href="/my-projects"
+                data-home-hover="true"
                 className="inline-flex items-center gap-2 rounded-full bg-emerald-400 px-5 py-3 font-semibold text-slate-950 transition hover:bg-emerald-300"
               >
                 <FolderKanban className="h-5 w-5" aria-hidden="true" />
@@ -100,6 +206,7 @@ export default function Home() {
               </Link>
               <Link
                 href="/contact-me"
+                data-home-hover="true"
                 className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-3 font-semibold text-white transition hover:border-sky-300/40 hover:bg-white/10"
               >
                 <Mail className="h-5 w-5" aria-hidden="true" />
@@ -107,6 +214,7 @@ export default function Home() {
               </Link>
               <Link
                 href={PersonalInfo.resumePath}
+                data-home-hover="true"
                 className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-slate-900/80 px-5 py-3 font-semibold text-slate-100 transition hover:border-emerald-300/40 hover:bg-slate-800"
               >
                 <FileText className="h-5 w-5" aria-hidden="true" />
@@ -114,7 +222,7 @@ export default function Home() {
               </Link>
             </div>
 
-            <div className="mt-10 flex flex-wrap gap-3">
+            <div ref={quickLinksRef} className="mt-10 flex flex-wrap gap-3">
               {quickLinks.map((item) => {
                 const Icon = item.icon;
 
@@ -122,9 +230,13 @@ export default function Home() {
                   <a
                     key={item.label}
                     href={item.href}
+                    data-home-hover="true"
                     className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-200 transition hover:border-cyan-300/40 hover:bg-white/10 hover:text-white"
                     {...(item.href.startsWith("http")
-                      ? { target: "_blank", rel: "noreferrer" }
+                      ? {
+                          target: "_blank",
+                          rel: "noopener noreferrer",
+                        }
                       : {})}
                   >
                     <Icon className="h-4 w-4" aria-hidden="true" />
@@ -135,7 +247,10 @@ export default function Home() {
             </div>
           </div>
 
-          <aside className="relative rounded-[32px] border border-white/10 bg-slate-900/75 p-6 shadow-2xl shadow-cyan-950/20 backdrop-blur">
+          <aside
+            ref={asideRef}
+            className="relative rounded-[32px] border border-white/10 bg-slate-900/75 p-6 shadow-2xl shadow-cyan-950/20 backdrop-blur"
+          >
             <div className="flex items-center gap-4 border-b border-white/10 pb-5">
               <Image
                 src="/me.jpg"
@@ -189,6 +304,7 @@ export default function Home() {
 
               <Link
                 href="/my-projects"
+                data-home-hover="true"
                 className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-200 transition hover:text-emerald-100"
               >
                 Ver trabajo destacado
@@ -199,7 +315,10 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
+      <Reveal
+        as="section"
+        className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8"
+      >
         <div className="grid gap-4 md:grid-cols-3">
           {valuePoints.map((item) => (
             <article
@@ -213,7 +332,7 @@ export default function Home() {
             </article>
           ))}
         </div>
-      </section>
+      </Reveal>
     </main>
   );
 }

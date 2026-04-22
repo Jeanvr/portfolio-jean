@@ -6,8 +6,7 @@ export const PersonalInfo = {
   role: "Frontend Developer",
   email: "vega.jeancarlo@gmail.com",
   githubUrl: "https://github.com/Jeanvr",
-  linkedinUrl:
-    "https://www.linkedin.com/search/results/all/?keywords=Jean%20Carlo%20Vega",
+  linkedinUrl: "https://www.linkedin.com/in/jeanvr/",
   resumePath: "/cv",
   summary:
     "Desarrollo interfaces modernas con React, Next.js y TypeScript, priorizando claridad visual, accesibilidad, rendimiento y mantenimiento.",
@@ -108,29 +107,6 @@ export const SkillData = [
     Image: "/mongodb.png",
     width: 40,
     height: 40,
-  },
-];
-
-export const Projects = [
-  {
-    title: "Website corporativo con Next.js",
-    text: "Landing moderna centrada en jerarquia visual, componentes reutilizables y una navegacion pensada para convertir visitas en oportunidades.",
-    src: "/NextWebsite.png",
-  },
-  {
-    title: "Experiencia visual tematica espacial",
-    text: "Proyecto de interfaz con narrativa fuerte, animaciones suaves y una direccion de arte enfocada en destacar la marca sin perder usabilidad.",
-    src: "/SpaceWebsite.png",
-  },
-  {
-    title: "Portfolio personal con enfoque UI",
-    text: "Sitio orientado a marca personal, rendimiento y presentacion clara del trabajo para facilitar procesos de seleccion y validacion tecnica.",
-    src: "/WebPortfolio.png",
-  },
-  {
-    title: "Landing experimental estilo Matrix",
-    text: "Exploracion visual con microinteracciones, contraste alto y una identidad digital reconocible para campanas o productos creativos.",
-    src: "/Matrix.png",
   },
 ];
 

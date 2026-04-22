@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import ContactForm from "@/components/ContactForm";
+import Reveal from "@/components/Reveal";
 
 export const metadata: Metadata = {
   title: "Contacto",
@@ -11,8 +12,14 @@ export const metadata: Metadata = {
 const Page = () => {
   return (
     <main className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
-      <section className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-        <article className="rounded-[32px] border border-white/10 bg-slate-900/75 p-8 shadow-2xl shadow-slate-950/30 backdrop-blur">
+      <section
+        id="contacto"
+        className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]"
+      >
+        <Reveal
+          as="article"
+          className="rounded-[32px] border border-white/10 bg-slate-900/75 p-8 shadow-2xl shadow-slate-950/30 backdrop-blur"
+        >
           <div className="flex items-center gap-4">
             <Image
               src="/menorca.jpg"
@@ -56,11 +63,15 @@ const Page = () => {
               </li>
             </ul>
           </div>
-        </article>
+        </Reveal>
 
-        <div className="rounded-[32px] border border-white/10 bg-white/[0.05] p-4 sm:p-6">
+        <Reveal
+          as="div"
+          className="rounded-[32px] border border-white/10 bg-white/[0.05] p-4 sm:p-6"
+          delay={0.08}
+        >
           <ContactForm />
-        </div>
+        </Reveal>
       </section>
     </main>
   );

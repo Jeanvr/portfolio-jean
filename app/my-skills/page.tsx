@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
+import Reveal from "@/components/Reveal";
 import { SkillData } from "@/constants";
 
 const swiperBreakpoints = {
@@ -21,7 +22,10 @@ const swiperBreakpoints = {
 const Page = () => {
   return (
     <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-      <section className="rounded-[32px] border border-white/10 bg-slate-900/70 p-8 backdrop-blur">
+      <Reveal
+        as="section"
+        className="rounded-[32px] border border-white/10 bg-slate-900/70 p-8 backdrop-blur"
+      >
         <p className="text-sm font-semibold uppercase tracking-[0.28em] text-emerald-300/80">
           Habilidades
         </p>
@@ -33,9 +37,13 @@ const Page = () => {
           visual y velocidad de desarrollo. Estas son las tecnologias que mejor
           representan como construyo producto en frontend.
         </p>
-      </section>
+      </Reveal>
 
-      <section className="mt-6 space-y-6">
+      <Reveal
+        as="section"
+        className="mt-6 space-y-6"
+        delay={0.06}
+      >
         {[false, true].map((reverse) => (
           <div
             key={String(reverse)}
@@ -71,7 +79,7 @@ const Page = () => {
             </Swiper>
           </div>
         ))}
-      </section>
+      </Reveal>
     </main>
   );
 };
