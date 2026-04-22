@@ -2,29 +2,24 @@
 import { NavLinks } from '@/constants'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Transition from './Transition'
 
 
 const Navigation = () => {
     const [isRouting, setisRouting] = useState(false)
     const path = usePathname()
-    const [isActived, setisActived] = useState(path)
-    const [prevPath, setprevPath] = useState("/")
+    const prevPathRef = useRef(path)
   
     useEffect(()=> {
-
-    if(prevPath !== path){
+    if(prevPathRef.current !== path){
         setisRouting(true)
     }
-
-    
-    
-  },[path,prevPath])
+  },[path])
   
   useEffect(()=>{
      if(isRouting) {
-        setprevPath(path);
+        prevPathRef.current = path
         const timeout = setTimeout(()=>{
             setisRouting(false)
         },1200)
