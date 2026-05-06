@@ -3,13 +3,13 @@ import { RxClipboard, RxDashboard, RxHome, RxPerson } from "react-icons/rx";
 export const PersonalInfo = {
   shortName: "Jean Carlo",
   fullName: "Jean Carlo Vega",
-  role: "Frontend Developer",
+  role: "IT Developer | Frontend, Python y datos",
   email: "vega.jeancarlo@gmail.com",
   githubUrl: "https://github.com/Jeanvr",
   linkedinUrl: "https://www.linkedin.com/in/jeanvr/",
   resumePath: "/cv",
   summary:
-    "Desarrollo interfaces modernas con React, Next.js y TypeScript, priorizando claridad visual, accesibilidad, rendimiento y mantenimiento.",
+    "Desarrollador IT enfocado en frontend moderno, automatización con Python y bases de datos.",
 };
 
 export const MainNavLinks = [

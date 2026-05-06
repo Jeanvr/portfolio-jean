@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
 import { MainNavLinks, PersonalInfo } from "@/constants";
+import ThemeToggle from "@/components/ThemeToggle";
 import {
   ScrollTrigger,
   bindHoverLift,
@@ -84,15 +85,27 @@ const Navbar = () => {
       );
 
       const animateHeader = (isScrolled: boolean) => {
+        const isDark = document.documentElement.classList.contains("dark");
+
         gsap.to(header, {
           backgroundColor: isScrolled
-            ? "rgba(2, 6, 23, 0.92)"
-            : "rgba(2, 6, 23, 0.8)",
+            ? isDark
+              ? "rgba(2, 6, 23, 0.92)"
+              : "rgba(255, 255, 255, 0.92)"
+            : isDark
+              ? "rgba(2, 6, 23, 0.8)"
+              : "rgba(255, 255, 255, 0.82)",
           borderColor: isScrolled
-            ? "rgba(148, 163, 184, 0.16)"
-            : "rgba(255, 255, 255, 0.1)",
+            ? isDark
+              ? "rgba(148, 163, 184, 0.16)"
+              : "rgba(148, 163, 184, 0.28)"
+            : isDark
+              ? "rgba(255, 255, 255, 0.1)"
+              : "rgba(148, 163, 184, 0.22)",
           boxShadow: isScrolled
-            ? "0 16px 40px rgba(2, 6, 23, 0.22)"
+            ? isDark
+              ? "0 16px 40px rgba(2, 6, 23, 0.22)"
+              : "0 16px 40px rgba(15, 23, 42, 0.12)"
             : "0 0 0 rgba(2, 6, 23, 0)",
           duration: 0.28,
           ease: "power2.out",
@@ -121,7 +134,7 @@ const Navbar = () => {
   return (
     <header
       ref={headerRef}
-      className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/80 backdrop-blur-xl"
+      className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/80 backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/80"
     >
       <div
         ref={containerRef}
@@ -133,13 +146,13 @@ const Navbar = () => {
             alt="Foto de Jean Carlo Vega"
             width={52}
             height={52}
-            className="h-12 w-12 rounded-2xl border border-white/10 object-cover"
+            className="h-12 w-12 rounded-2xl border border-slate-200 object-cover dark:border-white/10"
           />
           <div className="min-w-0">
-            <p className="truncate text-xs font-semibold uppercase tracking-[0.28em] text-emerald-300/80">
-              Frontend Developer
+            <p className="truncate text-xs font-semibold uppercase tracking-[0.28em] text-emerald-600 dark:text-emerald-300/80">
+              IT Developer
             </p>
-            <p className="truncate text-lg font-semibold text-white">
+            <p className="truncate text-lg font-semibold text-slate-950 dark:text-white">
               {PersonalInfo.fullName}
             </p>
           </div>
@@ -147,14 +160,14 @@ const Navbar = () => {
 
         <nav
           aria-label="Navegacion principal"
-          className="order-3 flex w-full flex-wrap gap-2 text-sm text-slate-200 lg:order-none lg:w-auto lg:justify-center"
+          className="order-3 flex w-full flex-wrap gap-2 text-sm text-slate-700 dark:text-slate-200 lg:order-none lg:w-auto lg:justify-center"
         >
           {MainNavLinks.map((item) => (
             <Link
               key={item.link}
               href={item.link}
               data-nav-link="true"
-              className="rounded-full border border-white/10 bg-white/5 px-4 py-2 transition hover:border-emerald-400/40 hover:bg-white/10 hover:text-white"
+              className="rounded-full border border-slate-200 bg-white/80 px-4 py-2 transition hover:border-emerald-500/40 hover:bg-emerald-50 hover:text-slate-950 dark:border-white/10 dark:bg-white/5 dark:hover:border-emerald-400/40 dark:hover:bg-white/10 dark:hover:text-white"
             >
               {item.name}
             </Link>
@@ -170,7 +183,7 @@ const Navbar = () => {
                 key={link.name}
                 href={link.href}
                 data-social-link="true"
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-100 transition hover:border-sky-400/40 hover:bg-white/10"
+                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3 py-2 text-sm text-slate-700 transition hover:border-sky-500/40 hover:bg-sky-50 hover:text-slate-950 dark:border-white/10 dark:bg-white/5 dark:text-slate-100 dark:hover:border-sky-400/40 dark:hover:bg-white/10"
                 {...(link.external
                   ? { target: "_blank", rel: "noopener noreferrer" }
                   : {})}
@@ -180,6 +193,7 @@ const Navbar = () => {
               </a>
             );
           })}
+          <ThemeToggle />
         </div>
       </div>
     </header>

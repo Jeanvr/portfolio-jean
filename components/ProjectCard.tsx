@@ -37,7 +37,7 @@ const ActionLink = ({
   const className =
     variant === "primary"
       ? "inline-flex items-center gap-2 rounded-full bg-emerald-400 px-4 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-emerald-300"
-      : "inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10";
+      : "inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white/80 px-4 py-2.5 text-sm font-semibold text-slate-800 transition hover:bg-sky-50 dark:border-white/15 dark:bg-white/5 dark:text-white dark:hover:bg-white/10";
 
   const content = (
     <>
@@ -196,71 +196,71 @@ const ProjectCard = ({
   return (
     <article
       ref={articleRef}
-      className="rounded-[32px] border border-white/10 bg-slate-900/80 p-6 shadow-2xl shadow-slate-950/20 backdrop-blur sm:p-8"
+      className="rounded-[32px] border border-slate-200 bg-white/85 p-6 shadow-2xl shadow-slate-200/70 backdrop-blur dark:border-white/10 dark:bg-slate-900/80 dark:shadow-slate-950/20 sm:p-8"
     >
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div className="max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-emerald-300/80">
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-emerald-700 dark:text-emerald-300/80">
               {category}
             </p>
-            <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl">
+            <h2 className="mt-3 text-3xl font-semibold text-slate-950 dark:text-white sm:text-4xl">
               {title}
             </h2>
-            <p className="mt-4 text-base leading-8 text-slate-300 sm:text-lg">
+            <p className="mt-4 text-base leading-8 text-slate-700 dark:text-slate-300 sm:text-lg">
               {summary}
             </p>
           </div>
 
           <div
             ref={yearRef}
-            className="inline-flex w-fit rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200"
+            className="inline-flex w-fit rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 dark:border-white/10 dark:bg-white/5 dark:text-slate-200"
           >
             {year}
           </div>
         </div>
 
         <div className="grid gap-4 md:grid-cols-2">
-          <section className="rounded-[24px] border border-white/10 bg-white/[0.04] p-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/80">
+          <section className="rounded-[24px] border border-slate-200 bg-slate-50/80 p-5 dark:border-white/10 dark:bg-white/[0.04]">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-700 dark:text-sky-200/80">
               Problema
             </p>
-            <p className="mt-3 text-sm leading-7 text-slate-300">{problem}</p>
+            <p className="mt-3 text-sm leading-7 text-slate-700 dark:text-slate-300">{problem}</p>
           </section>
 
-          <section className="rounded-[24px] border border-white/10 bg-white/[0.04] p-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/80">
+          <section className="rounded-[24px] border border-slate-200 bg-slate-50/80 p-5 dark:border-white/10 dark:bg-white/[0.04]">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-700 dark:text-sky-200/80">
               Solucion
             </p>
-            <p className="mt-3 text-sm leading-7 text-slate-300">{solution}</p>
+            <p className="mt-3 text-sm leading-7 text-slate-700 dark:text-slate-300">{solution}</p>
           </section>
 
-          <section className="rounded-[24px] border border-white/10 bg-white/[0.04] p-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/80">
+          <section className="rounded-[24px] border border-slate-200 bg-slate-50/80 p-5 dark:border-white/10 dark:bg-white/[0.04]">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-700 dark:text-sky-200/80">
               Reto tecnico
             </p>
-            <p className="mt-3 text-sm leading-7 text-slate-300">
+            <p className="mt-3 text-sm leading-7 text-slate-700 dark:text-slate-300">
               {technicalChallenge}
             </p>
           </section>
 
-          <section className="rounded-[24px] border border-white/10 bg-white/[0.04] p-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/80">
+          <section className="rounded-[24px] border border-slate-200 bg-slate-50/80 p-5 dark:border-white/10 dark:bg-white/[0.04]">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-700 dark:text-sky-200/80">
               Resultado
             </p>
-            <p className="mt-3 text-sm leading-7 text-slate-300">{result}</p>
+            <p className="mt-3 text-sm leading-7 text-slate-700 dark:text-slate-300">{result}</p>
           </section>
         </div>
 
-        <div className="rounded-[24px] border border-white/10 bg-slate-950/40 p-5">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/80">
+        <div className="rounded-[24px] border border-slate-200 bg-slate-50/80 p-5 dark:border-white/10 dark:bg-slate-950/40">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-700 dark:text-sky-200/80">
             Stack
           </p>
           <div ref={stackRef} className="mt-4 flex flex-wrap gap-2">
             {stack.map((item) => (
               <span
                 key={item}
-                className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-200"
+                className="rounded-full border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 dark:border-white/10 dark:bg-white/5 dark:text-slate-200"
               >
                 {item}
               </span>
@@ -270,11 +270,11 @@ const ProjectCard = ({
 
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="space-y-2">
-            <p className="text-sm text-slate-300">
-              Cada enlace esta pensado para facilitar revision tecnica y
-              validacion rapida durante procesos de seleccion.
+            <p className="text-sm text-slate-700 dark:text-slate-300">
+              Cada enlace está pensado para facilitar revisión técnica,
+              conversación profesional y validación rápida del trabajo.
             </p>
-            {note ? <p className="text-sm text-amber-200/80">{note}</p> : null}
+            {note ? <p className="text-sm text-amber-700 dark:text-amber-200/80">{note}</p> : null}
           </div>
 
           <div ref={actionsRef} className="flex flex-wrap gap-3">
@@ -293,12 +293,12 @@ const ProjectCard = ({
           </div>
         </div>
 
-        <div className="border-t border-white/10 pt-5">
+        <div className="border-t border-slate-200 pt-5 dark:border-white/10">
           <a
             href={repoUrl}
             target={repoExternal ? "_blank" : undefined}
             rel={repoExternal ? "noopener noreferrer" : undefined}
-            className="inline-flex items-center gap-2 text-sm font-medium text-slate-300 transition hover:text-white"
+            className="inline-flex items-center gap-2 text-sm font-medium text-slate-700 transition hover:text-slate-950 dark:text-slate-300 dark:hover:text-white"
           >
             <Github className="h-4 w-4" aria-hidden="true" />
             <span>Repositorio de referencia para revisar implementacion</span>

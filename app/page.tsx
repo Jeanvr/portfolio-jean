@@ -20,25 +20,26 @@ const stack = [
   "Next.js",
   "TypeScript",
   "Tailwind CSS",
-  "Accesibilidad",
-  "Performance",
+  "Python",
+  "Bases de datos",
+  "Automatización",
 ];
 
 const valuePoints = [
   {
-    title: "Interfaces listas para producto",
+    title: "Frontend moderno",
     description:
-      "Trabajo jerarquia visual, componentes reutilizables y estados claros para que el frontend ayude al negocio.",
+      "Construyo interfaces claras con React, Next.js, TypeScript y Tailwind, cuidando UX, mantenimiento y responsive real.",
   },
   {
-    title: "Criterio tecnico visible",
+    title: "Automatización y datos",
     description:
-      "Cuido rendimiento, mantenibilidad y experiencia movil para que el portfolio no sea solo diseno, sino ejecucion real.",
+      "Aplico Python, scraping, bases de datos y flujos de datos para reducir tareas manuales y ordenar información útil para negocio.",
   },
   {
-    title: "Colaboracion con intencion",
+    title: "Problemas reales de negocio",
     description:
-      "Pienso como parte del equipo: diseno, producto y desarrollo tienen que verse alineados desde la primera entrega.",
+      "Trabajo desde IT dando soporte a procesos internos, conectando tecnología con necesidades concretas de operación.",
   },
 ];
 
@@ -160,7 +161,7 @@ export default function Home() {
 
   return (
     <main ref={rootRef} className="relative overflow-hidden">
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(16,185,129,0.18),transparent_28%),radial-gradient(circle_at_80%_10%,rgba(14,165,233,0.18),transparent_22%),linear-gradient(180deg,#07111f_0%,#0b1729_55%,#08111d_100%)]" />
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(16,185,129,0.16),transparent_28%),radial-gradient(circle_at_80%_10%,rgba(14,165,233,0.14),transparent_22%),linear-gradient(180deg,#f8fafc_0%,#eef8ff_55%,#f8fafc_100%)] dark:bg-[radial-gradient(circle_at_top_left,rgba(16,185,129,0.18),transparent_28%),radial-gradient(circle_at_80%_10%,rgba(14,165,233,0.18),transparent_22%),linear-gradient(180deg,#07111f_0%,#0b1729_55%,#08111d_100%)]" />
 
       <section className="mx-auto max-w-7xl px-4 pb-14 pt-10 sm:px-6 lg:px-8 lg:pb-20 lg:pt-16">
         <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-start xl:items-center">
@@ -168,27 +169,29 @@ export default function Home() {
             
             <h1
               ref={titleRef}
-              className="max-w-4xl text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl"
+              className="max-w-4xl text-4xl font-semibold leading-tight text-slate-950 dark:text-white sm:text-5xl lg:text-6xl"
             >
               Jean Carlo Vega
               <span className="block bg-gradient-to-r from-emerald-300 via-sky-300 to-cyan-200 bg-clip-text text-transparent">
-                Frontend Developer enfocado en producto, UX y rendimiento.
+                Frontend moderno, automatización con Python y bases de datos.
               </span>
             </h1>
 
             <p
               ref={descriptionRef}
-              className="mt-6 max-w-2xl text-lg leading-8 text-slate-300 sm:text-xl"
+              className="mt-6 max-w-2xl text-lg leading-8 text-slate-700 dark:text-slate-300 sm:text-xl"
             >
-              {PersonalInfo.summary} Convierto ideas en interfaces claras,
-              rapidas y preparadas para contratacion, validacion y crecimiento.
+              {PersonalInfo.summary} Actualmente trabajo en IT en una
+              distribuidora con varias sedes en Catalunya, donde aplico Python,
+              gestión de datos y automatización para resolver problemas reales
+              de negocio.
             </p>
 
             <div ref={tagsRef} className="mt-8 flex flex-wrap gap-3">
-              {stack.filter((item) => item !== "Performance").map((item) => (
+              {stack.map((item) => (
                 <span
                   key={item}
-                  className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-200"
+                  className="rounded-full border border-slate-200 bg-white/80 px-4 py-2 text-sm text-slate-700 shadow-sm dark:border-white/10 dark:bg-white/5 dark:text-slate-200 dark:shadow-none"
                 >
                   {item}
                 </span>
@@ -207,15 +210,15 @@ export default function Home() {
               <Link
                 href="/contact-me"
                 data-home-hover="true"
-                className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-3 font-semibold text-white transition hover:border-sky-300/40 hover:bg-white/10"
+                className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white/80 px-5 py-3 font-semibold text-slate-800 transition hover:border-sky-500/40 hover:bg-sky-50 dark:border-white/15 dark:bg-white/5 dark:text-white dark:hover:border-sky-300/40 dark:hover:bg-white/10"
               >
                 <Mail className="h-5 w-5" aria-hidden="true" />
-                Contacto
+                Contactar
               </Link>
               <Link
                 href={PersonalInfo.resumePath}
                 data-home-hover="true"
-                className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-slate-900/80 px-5 py-3 font-semibold text-slate-100 transition hover:border-emerald-300/40 hover:bg-slate-800"
+                className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-slate-950 px-5 py-3 font-semibold text-white transition hover:border-emerald-500/40 hover:bg-slate-800 dark:border-white/15 dark:bg-slate-900/80 dark:text-slate-100 dark:hover:border-emerald-300/40"
               >
                 <FileText className="h-5 w-5" aria-hidden="true" />
                 Ver CV
@@ -231,7 +234,7 @@ export default function Home() {
                     key={item.label}
                     href={item.href}
                     data-home-hover="true"
-                    className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-200 transition hover:border-cyan-300/40 hover:bg-white/10 hover:text-white"
+                    className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-4 py-2 text-sm text-slate-700 shadow-sm transition hover:border-cyan-500/40 hover:bg-cyan-50 hover:text-slate-950 dark:border-white/10 dark:bg-white/5 dark:text-slate-200 dark:shadow-none dark:hover:border-cyan-300/40 dark:hover:bg-white/10 dark:hover:text-white"
                     {...(item.href.startsWith("http")
                       ? {
                           target: "_blank",
@@ -249,55 +252,55 @@ export default function Home() {
 
           <aside
             ref={asideRef}
-            className="relative rounded-[32px] border border-white/10 bg-slate-900/75 p-6 shadow-2xl shadow-cyan-950/20 backdrop-blur"
+            className="relative rounded-[32px] border border-slate-200 bg-white/85 p-6 shadow-2xl shadow-slate-200/70 backdrop-blur dark:border-white/10 dark:bg-slate-900/75 dark:shadow-cyan-950/20"
           >
-            <div className="flex items-center gap-4 border-b border-white/10 pb-5">
+            <div className="flex items-center gap-4 border-b border-slate-200 pb-5 dark:border-white/10">
               <Image
                 src="/me.jpg"
                 alt="Retrato de Jean Carlo Vega"
                 width={88}
                 height={88}
-                className="h-20 w-20 rounded-3xl border border-white/10 object-cover"
+                className="h-20 w-20 rounded-3xl border border-slate-200 object-cover dark:border-white/10"
                 priority
               />
               <div>
-                <p className="text-sm uppercase tracking-[0.22em] text-sky-300/80">
+                <p className="text-sm uppercase tracking-[0.22em] text-sky-700 dark:text-sky-300/80">
                   Perfil profesional
                 </p>
-                <h2 className="mt-1 text-2xl font-semibold text-white">
-                  Frontend con foco en contratacion
+                <h2 className="mt-1 text-2xl font-semibold text-slate-950 dark:text-white">
+                  IT con foco práctico
                 </h2>
               </div>
             </div>
 
             <div className="mt-6 space-y-4">
-              <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-4">
-                <p className="text-sm font-semibold text-emerald-200">
-                  Stack principal
+              <div className="rounded-3xl border border-slate-200 bg-slate-50/80 p-4 dark:border-white/10 dark:bg-white/[0.03]">
+                <p className="text-sm font-semibold text-emerald-700 dark:text-emerald-200">
+                  Trabajo actual
                 </p>
-                <p className="mt-2 text-sm leading-7 text-slate-300">
-                  React, Next.js, TypeScript, Tailwind CSS, Framer Motion y
-                  buenas practicas de accesibilidad, rendimiento y responsive
-                  design.
+                <p className="mt-2 text-sm leading-7 text-slate-700 dark:text-slate-300">
+                  IT en una distribuidora con varias sedes en Catalunya,
+                  trabajando con datos, Python, automatización y soporte a
+                  procesos internos.
                 </p>
               </div>
 
-              <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-4">
-                <p className="text-sm font-semibold text-sky-200">
+              <div className="rounded-3xl border border-slate-200 bg-slate-50/80 p-4 dark:border-white/10 dark:bg-white/[0.03]">
+                <p className="text-sm font-semibold text-sky-700 dark:text-sky-200">
                   Propuesta de valor
                 </p>
-                <ul className="mt-3 space-y-3 text-sm leading-7 text-slate-300">
+                <ul className="mt-3 space-y-3 text-sm leading-7 text-slate-700 dark:text-slate-300">
                   <li className="flex gap-3">
                     <span className="mt-2 h-2 w-2 rounded-full bg-emerald-300" />
-                    Interfaces claras que comunican mejor el producto.
+                    Frontend moderno con criterio de UX y mantenimiento.
                   </li>
                   <li className="flex gap-3">
                     <span className="mt-2 h-2 w-2 rounded-full bg-sky-300" />
-                    Decisiones visuales con criterio tecnico y mantenimiento.
+                    Automatización, scraping y flujos de datos con Python.
                   </li>
                   <li className="flex gap-3">
                     <span className="mt-2 h-2 w-2 rounded-full bg-cyan-200" />
-                    Entregas orientadas a conversion, legibilidad y confianza.
+                    Herramientas internas para resolver problemas operativos.
                   </li>
                 </ul>
               </div>
@@ -305,7 +308,7 @@ export default function Home() {
               <Link
                 href="/my-projects"
                 data-home-hover="true"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-200 transition hover:text-emerald-100"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-700 transition hover:text-emerald-600 dark:text-emerald-200 dark:hover:text-emerald-100"
               >
                 Ver trabajo destacado
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -323,10 +326,10 @@ export default function Home() {
           {valuePoints.map((item) => (
             <article
               key={item.title}
-              className="rounded-[28px] border border-white/10 bg-white/[0.04] p-6 backdrop-blur"
+              className="rounded-[28px] border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur dark:border-white/10 dark:bg-white/[0.04] dark:shadow-none"
             >
-              <p className="text-lg font-semibold text-white">{item.title}</p>
-              <p className="mt-3 text-sm leading-7 text-slate-300">
+              <p className="text-lg font-semibold text-slate-950 dark:text-white">{item.title}</p>
+              <p className="mt-3 text-sm leading-7 text-slate-700 dark:text-slate-300">
                 {item.description}
               </p>
             </article>
