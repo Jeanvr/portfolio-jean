@@ -1,10 +1,43 @@
 "use client";
 
-import emailjs from "@emailjs/browser";
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { bindHoverLift, setupGsap, useGSAP } from "@/lib/gsap";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const CONTACT_EMAIL = "vega.jeancarlo@gmail.com";
+
+type ContactFormErrors = {
+  name?: string;
+  email?: string;
+  message?: string;
+};
+
+const validateForm = (values: {
+  name: string;
+  email: string;
+  message: string;
+}) => {
+  const errors: ContactFormErrors = {};
+  const trimmedName = values.name.trim();
+  const trimmedEmail = values.email.trim();
+  const trimmedMessage = values.message.trim();
+
+  if (!trimmedName) {
+    errors.name = "El nombre es obligatorio.";
+  }
+
+  if (!trimmedEmail) {
+    errors.email = "El email es obligatorio.";
+  } else if (!EMAIL_REGEX.test(trimmedEmail)) {
+    errors.email = "Introduce un email válido.";
+  }
+
+  if (!trimmedMessage) {
+    errors.message = "El mensaje es obligatorio.";
+  }
+
+  return errors;
+};
 
 const ContactForm: React.FC = () => {
   const formRef = useRef<HTMLFormElement>(null);
@@ -12,9 +45,13 @@ const ContactForm: React.FC = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const [sending, setSending] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState<ContactFormErrors>({});
+  const [submitted, setSubmitted] = useState(false);
+
+  const isFormValid = useMemo(
+    () => Object.keys(validateForm({ name, email, message })).length === 0,
+    [email, message, name],
+  );
 
   useGSAP(
     () => {
@@ -35,167 +72,168 @@ const ContactForm: React.FC = () => {
     { scope: formRef },
   );
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const trimmedName = name.trim();
     const trimmedEmail = email.trim();
     const trimmedMessage = message.trim();
-    const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
-    const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
-    const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
-    const form = formRef.current;
+    const validationErrors = validateForm({
+      name: trimmedName,
+      email: trimmedEmail,
+      message: trimmedMessage,
+    });
 
-    setError("");
-    setSuccess(false);
+    setErrors(validationErrors);
+    setSubmitted(false);
 
-    if (!trimmedName) {
-      setError("Tu nombre es obligatorio.");
+    if (Object.keys(validationErrors).length > 0) {
       return;
     }
 
-    if (!trimmedEmail || !EMAIL_REGEX.test(trimmedEmail)) {
-      setError("Introduce un email valido.");
-      return;
-    }
+    const subject = `Contacto desde portfolio - ${trimmedName}`;
+    const body = [
+      `Nombre: ${trimmedName}`,
+      `Email: ${trimmedEmail}`,
+      "",
+      "Mensaje:",
+      trimmedMessage,
+    ].join("\n");
+    const mailtoUrl = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
+      subject,
+    )}&body=${encodeURIComponent(body)}`;
 
-    if (!trimmedMessage) {
-      setError("El mensaje no puede estar vacio.");
-      return;
-    }
+    window.location.href = mailtoUrl;
+    setSubmitted(true);
+  };
 
-    if (!form) {
-      console.error("EmailJS form ref is not available.");
-      setError("El formulario todavia no esta listo. Intentalo de nuevo.");
-      return;
-    }
-
-    if (!serviceId || !templateId || !publicKey) {
-      console.error("EmailJS configuration is missing.", {
-        hasServiceId: Boolean(serviceId),
-        hasTemplateId: Boolean(templateId),
-        hasPublicKey: Boolean(publicKey),
-      });
-      setError("El servicio de correo no esta configurado.");
-      return;
-    }
-
-    setName(trimmedName);
-    setEmail(trimmedEmail);
-    setMessage(trimmedMessage);
-
-    const nameField = form.elements.namedItem("user_name") as HTMLInputElement | null;
-    const emailField = form.elements.namedItem("user_email") as HTMLInputElement | null;
-    const messageField = form.elements.namedItem("message") as HTMLTextAreaElement | null;
-
-    if (nameField) {
-      nameField.value = trimmedName;
-    }
-
-    if (emailField) {
-      emailField.value = trimmedEmail;
-    }
-
-    if (messageField) {
-      messageField.value = trimmedMessage;
-    }
-
-    setSending(true);
-
-    try {
-      await emailjs.sendForm(serviceId, templateId, form, {
-        publicKey,
-      });
-      setSuccess(true);
-      setName("");
-      setEmail("");
-      setMessage("");
-    } catch (submitError: unknown) {
-      const emailJsError = submitError as { status?: number; text?: string };
-
-      console.error("EmailJS sendForm failed.", {
-        status: emailJsError?.status,
-        text: emailJsError?.text,
-        error: submitError,
-      });
-      setError("No se pudo enviar el mensaje ahora mismo. Prueba de nuevo mas tarde.");
-    } finally {
-      setSending(false);
-    }
+  const handleClear = () => {
+    setName("");
+    setEmail("");
+    setMessage("");
+    setErrors({});
+    setSubmitted(false);
   };
 
   return (
     <div className="rounded-[28px] bg-slate-950/50 p-4 sm:p-6">
-      <h2 className="text-2xl font-semibold text-white">Escribeme</h2>
+      <h2 className="text-2xl font-semibold text-white">Escríbeme</h2>
       <p className="mt-2 text-sm leading-7 text-slate-300">
-        Cuentame el tipo de proyecto, rol o entrevista que quieres comentar.
+        Cuéntame el tipo de proyecto, rol o entrevista que quieres comentar.
       </p>
 
       <form ref={formRef} onSubmit={handleSubmit} className="mt-6 space-y-4" noValidate>
         <div className="flex flex-col">
-          <label htmlFor="name" className="mb-2 text-sm font-medium text-slate-200">
+          <label htmlFor="contact-name" className="mb-2 text-sm font-medium text-slate-200">
             Nombre
           </label>
           <input
             type="text"
-            id="name"
+            id="contact-name"
             name="user_name"
             value={name}
-            onChange={(event) => setName(event.target.value)}
+            onChange={(event) => {
+              setName(event.target.value);
+              setErrors((currentErrors) => ({ ...currentErrors, name: undefined }));
+              setSubmitted(false);
+            }}
             autoComplete="name"
             required
-            className="rounded-2xl border border-white/10 bg-white/5 p-3 text-white placeholder:text-slate-500 focus:border-emerald-400 focus:outline-none"
+            aria-invalid={Boolean(errors.name)}
+            aria-describedby={errors.name ? "contact-name-error" : undefined}
+            className="rounded-2xl border border-white/10 bg-white/5 p-3 text-white placeholder:text-slate-500 focus:border-emerald-400 focus:outline-none aria-[invalid=true]:border-rose-400"
             placeholder="Tu nombre"
           />
+          {errors.name && (
+            <p id="contact-name-error" className="mt-2 text-sm text-rose-300">
+              {errors.name}
+            </p>
+          )}
         </div>
 
         <div className="flex flex-col">
-          <label htmlFor="email" className="mb-2 text-sm font-medium text-slate-200">
+          <label htmlFor="contact-email" className="mb-2 text-sm font-medium text-slate-200">
             Email
           </label>
           <input
             type="email"
-            id="email"
+            id="contact-email"
             name="user_email"
             value={email}
-            onChange={(event) => setEmail(event.target.value)}
+            onChange={(event) => {
+              setEmail(event.target.value);
+              setErrors((currentErrors) => ({ ...currentErrors, email: undefined }));
+              setSubmitted(false);
+            }}
             autoComplete="email"
             required
-            className="rounded-2xl border border-white/10 bg-white/5 p-3 text-white placeholder:text-slate-500 focus:border-emerald-400 focus:outline-none"
+            aria-invalid={Boolean(errors.email)}
+            aria-describedby={errors.email ? "contact-email-error" : undefined}
+            className="rounded-2xl border border-white/10 bg-white/5 p-3 text-white placeholder:text-slate-500 focus:border-emerald-400 focus:outline-none aria-[invalid=true]:border-rose-400"
             placeholder="tu@email.com"
           />
+          {errors.email && (
+            <p id="contact-email-error" className="mt-2 text-sm text-rose-300">
+              {errors.email}
+            </p>
+          )}
         </div>
 
         <div className="flex flex-col">
-          <label htmlFor="message" className="mb-2 text-sm font-medium text-slate-200">
+          <label htmlFor="contact-message" className="mb-2 text-sm font-medium text-slate-200">
             Mensaje
           </label>
           <textarea
-            id="message"
+            id="contact-message"
             name="message"
             value={message}
-            onChange={(event) => setMessage(event.target.value)}
+            onChange={(event) => {
+              setMessage(event.target.value);
+              setErrors((currentErrors) => ({ ...currentErrors, message: undefined }));
+              setSubmitted(false);
+            }}
             required
             rows={6}
-            className="rounded-2xl border border-white/10 bg-white/5 p-3 text-white placeholder:text-slate-500 focus:border-emerald-400 focus:outline-none"
-            placeholder="Cuentame el proyecto, el rol o la entrevista que quieres comentar."
+            aria-invalid={Boolean(errors.message)}
+            aria-describedby={errors.message ? "contact-message-error" : undefined}
+            className="rounded-2xl border border-white/10 bg-white/5 p-3 text-white placeholder:text-slate-500 focus:border-emerald-400 focus:outline-none aria-[invalid=true]:border-rose-400"
+            placeholder="Cuéntame el proyecto, el rol o la entrevista que quieres comentar."
           />
+          {errors.message && (
+            <p id="contact-message-error" className="mt-2 text-sm text-rose-300">
+              {errors.message}
+            </p>
+          )}
         </div>
 
-        <button
-          ref={submitButtonRef}
-          type="submit"
-          className={`w-full rounded-2xl bg-emerald-400 p-3 font-semibold text-slate-950 transition hover:bg-emerald-300 ${
-            sending ? "cursor-not-allowed opacity-60" : ""
-          }`}
-          disabled={sending}
-        >
-          {sending ? "Enviando..." : "Enviar mensaje"}
-        </button>
+        <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
+          <button
+            ref={submitButtonRef}
+            type="submit"
+            aria-label="Enviar mensaje por correo electrónico"
+            className="rounded-2xl bg-emerald-400 p-3 font-semibold text-slate-950 transition hover:bg-emerald-300 focus:outline-none focus:ring-2 focus:ring-emerald-200 focus:ring-offset-2 focus:ring-offset-slate-950"
+          >
+            Enviar mensaje
+          </button>
+
+          <button
+            type="button"
+            onClick={handleClear}
+            className="rounded-2xl border border-white/10 bg-white/5 px-5 py-3 font-semibold text-slate-100 transition hover:border-sky-400/40 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-sky-200 focus:ring-offset-2 focus:ring-offset-slate-950"
+          >
+            Limpiar
+          </button>
+        </div>
 
         <div aria-live="polite" className="min-h-6 text-sm">
-          {success && <p className="text-emerald-300">Mensaje enviado correctamente.</p>}
-          {error && <p className="text-rose-300">{error}</p>}
+          {submitted && (
+            <p className="text-emerald-300">
+              Se abrió tu cliente de correo con el mensaje preparado.
+            </p>
+          )}
+          {!submitted && isFormValid && (
+            <p className="text-sky-300">Formulario listo para enviar por correo.</p>
+          )}
         </div>
       </form>
     </div>

@@ -33,14 +33,14 @@ const Page = () => {
                 Contacto
               </p>
               <h1 className="mt-1 text-3xl font-semibold text-white">
-                Hablemos de tu proximo proyecto
+                Hablemos de tu próximo proyecto
               </h1>
             </div>
           </div>
 
           <p className="mt-6 text-base leading-8 text-slate-300">
-            Si estas buscando un frontend developer para producto, freelance o
-            procesos de seleccion, este es el mejor punto de entrada. Cuentame
+            Si estás buscando un frontend developer para producto, freelance o
+            procesos de selección, este es el mejor punto de entrada. Cuéntame
             el contexto, los objetivos y el tipo de rol que tienes en mente.
           </p>
 
@@ -59,7 +59,7 @@ const Page = () => {
               </li>
               <li className="flex gap-3">
                 <span className="mt-2 h-2 w-2 rounded-full bg-cyan-200" />
-                Comunicacion orientada a producto, UX y entrega real.
+                Comunicación orientada a producto, UX y entrega real.
               </li>
             </ul>
           </div>
