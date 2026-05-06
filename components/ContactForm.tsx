@@ -1,10 +1,15 @@
 "use client";
 
 import React, { useMemo, useRef, useState } from "react";
+import emailjs from "@emailjs/browser";
 import { bindHoverLift, setupGsap, useGSAP } from "@/lib/gsap";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const CONTACT_EMAIL = "vega.jeancarlo@gmail.com";
+const EMAILJS_SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
+const EMAILJS_TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
+const EMAILJS_PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
+
+type SubmitStatus = "idle" | "sending" | "success" | "error";
 
 type ContactFormErrors = {
   name?: string;
@@ -46,7 +51,8 @@ const ContactForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [errors, setErrors] = useState<ContactFormErrors>({});
-  const [submitted, setSubmitted] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<SubmitStatus>("idle");
+  const [statusMessage, setStatusMessage] = useState("");
 
   const isFormValid = useMemo(
     () => Object.keys(validateForm({ name, email, message })).length === 0,
@@ -72,7 +78,7 @@ const ContactForm: React.FC = () => {
     { scope: formRef },
   );
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const trimmedName = name.trim();
@@ -85,26 +91,54 @@ const ContactForm: React.FC = () => {
     });
 
     setErrors(validationErrors);
-    setSubmitted(false);
+    setSubmitStatus("idle");
+    setStatusMessage("");
 
     if (Object.keys(validationErrors).length > 0) {
       return;
     }
 
-    const subject = `Contacto desde portfolio - ${trimmedName}`;
-    const body = [
-      `Nombre: ${trimmedName}`,
-      `Email: ${trimmedEmail}`,
-      "",
-      "Mensaje:",
-      trimmedMessage,
-    ].join("\n");
-    const mailtoUrl = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
-      subject,
-    )}&body=${encodeURIComponent(body)}`;
+    if (!EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID || !EMAILJS_PUBLIC_KEY) {
+      console.error("EmailJS environment variables are missing", {
+        hasServiceId: Boolean(EMAILJS_SERVICE_ID),
+        hasTemplateId: Boolean(EMAILJS_TEMPLATE_ID),
+        hasPublicKey: Boolean(EMAILJS_PUBLIC_KEY),
+      });
+      setSubmitStatus("error");
+      setStatusMessage("El servicio de contacto no está configurado.");
+      return;
+    }
 
-    window.location.href = mailtoUrl;
-    setSubmitted(true);
+    if (!formRef.current) {
+      console.error("Contact form ref is not available for EmailJS submission");
+      setSubmitStatus("error");
+      setStatusMessage(
+        "No se pudo enviar el mensaje. Inténtalo de nuevo más tarde.",
+      );
+      return;
+    }
+
+    setSubmitStatus("sending");
+
+    try {
+      await emailjs.sendForm(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+        formRef.current!,
+        {
+          publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!,
+        },
+      );
+
+      setSubmitStatus("success");
+      setStatusMessage("Mensaje enviado correctamente.");
+    } catch (error) {
+      console.error("EmailJS contact form submission failed", error);
+      setSubmitStatus("error");
+      setStatusMessage(
+        "No se pudo enviar el mensaje. Inténtalo de nuevo más tarde.",
+      );
+    }
   };
 
   const handleClear = () => {
@@ -112,8 +146,11 @@ const ContactForm: React.FC = () => {
     setEmail("");
     setMessage("");
     setErrors({});
-    setSubmitted(false);
+    setSubmitStatus("idle");
+    setStatusMessage("");
   };
+
+  const isSending = submitStatus === "sending";
 
   return (
     <div className="rounded-[28px] bg-slate-950/50 p-4 sm:p-6">
@@ -122,9 +159,17 @@ const ContactForm: React.FC = () => {
         Cuéntame el tipo de proyecto, rol o entrevista que quieres comentar.
       </p>
 
-      <form ref={formRef} onSubmit={handleSubmit} className="mt-6 space-y-4" noValidate>
+      <form
+        ref={formRef}
+        onSubmit={handleSubmit}
+        className="mt-6 space-y-4"
+        noValidate
+      >
         <div className="flex flex-col">
-          <label htmlFor="contact-name" className="mb-2 text-sm font-medium text-slate-200">
+          <label
+            htmlFor="contact-name"
+            className="mb-2 text-sm font-medium text-slate-200"
+          >
             Nombre
           </label>
           <input
@@ -134,14 +179,19 @@ const ContactForm: React.FC = () => {
             value={name}
             onChange={(event) => {
               setName(event.target.value);
-              setErrors((currentErrors) => ({ ...currentErrors, name: undefined }));
-              setSubmitted(false);
+              setErrors((currentErrors) => ({
+                ...currentErrors,
+                name: undefined,
+              }));
+              setSubmitStatus("idle");
+              setStatusMessage("");
             }}
             autoComplete="name"
             required
+            disabled={isSending}
             aria-invalid={Boolean(errors.name)}
             aria-describedby={errors.name ? "contact-name-error" : undefined}
-            className="rounded-2xl border border-white/10 bg-white/5 p-3 text-white placeholder:text-slate-500 focus:border-emerald-400 focus:outline-none aria-[invalid=true]:border-rose-400"
+            className="rounded-2xl border border-white/10 bg-white/5 p-3 text-white placeholder:text-slate-500 focus:border-emerald-400 focus:outline-none disabled:cursor-not-allowed disabled:opacity-70 aria-[invalid=true]:border-rose-400"
             placeholder="Tu nombre"
           />
           {errors.name && (
@@ -152,7 +202,10 @@ const ContactForm: React.FC = () => {
         </div>
 
         <div className="flex flex-col">
-          <label htmlFor="contact-email" className="mb-2 text-sm font-medium text-slate-200">
+          <label
+            htmlFor="contact-email"
+            className="mb-2 text-sm font-medium text-slate-200"
+          >
             Email
           </label>
           <input
@@ -162,14 +215,19 @@ const ContactForm: React.FC = () => {
             value={email}
             onChange={(event) => {
               setEmail(event.target.value);
-              setErrors((currentErrors) => ({ ...currentErrors, email: undefined }));
-              setSubmitted(false);
+              setErrors((currentErrors) => ({
+                ...currentErrors,
+                email: undefined,
+              }));
+              setSubmitStatus("idle");
+              setStatusMessage("");
             }}
             autoComplete="email"
             required
+            disabled={isSending}
             aria-invalid={Boolean(errors.email)}
             aria-describedby={errors.email ? "contact-email-error" : undefined}
-            className="rounded-2xl border border-white/10 bg-white/5 p-3 text-white placeholder:text-slate-500 focus:border-emerald-400 focus:outline-none aria-[invalid=true]:border-rose-400"
+            className="rounded-2xl border border-white/10 bg-white/5 p-3 text-white placeholder:text-slate-500 focus:border-emerald-400 focus:outline-none disabled:cursor-not-allowed disabled:opacity-70 aria-[invalid=true]:border-rose-400"
             placeholder="tu@email.com"
           />
           {errors.email && (
@@ -180,7 +238,10 @@ const ContactForm: React.FC = () => {
         </div>
 
         <div className="flex flex-col">
-          <label htmlFor="contact-message" className="mb-2 text-sm font-medium text-slate-200">
+          <label
+            htmlFor="contact-message"
+            className="mb-2 text-sm font-medium text-slate-200"
+          >
             Mensaje
           </label>
           <textarea
@@ -189,14 +250,19 @@ const ContactForm: React.FC = () => {
             value={message}
             onChange={(event) => {
               setMessage(event.target.value);
-              setErrors((currentErrors) => ({ ...currentErrors, message: undefined }));
-              setSubmitted(false);
+              setErrors((currentErrors) => ({
+                ...currentErrors,
+                message: undefined,
+              }));
+              setSubmitStatus("idle");
+              setStatusMessage("");
             }}
             required
+            disabled={isSending}
             rows={6}
             aria-invalid={Boolean(errors.message)}
             aria-describedby={errors.message ? "contact-message-error" : undefined}
-            className="rounded-2xl border border-white/10 bg-white/5 p-3 text-white placeholder:text-slate-500 focus:border-emerald-400 focus:outline-none aria-[invalid=true]:border-rose-400"
+            className="rounded-2xl border border-white/10 bg-white/5 p-3 text-white placeholder:text-slate-500 focus:border-emerald-400 focus:outline-none disabled:cursor-not-allowed disabled:opacity-70 aria-[invalid=true]:border-rose-400"
             placeholder="Cuéntame el proyecto, el rol o la entrevista que quieres comentar."
           />
           {errors.message && (
@@ -211,27 +277,28 @@ const ContactForm: React.FC = () => {
             ref={submitButtonRef}
             type="submit"
             aria-label="Enviar mensaje por correo electrónico"
-            className="rounded-2xl bg-emerald-400 p-3 font-semibold text-slate-950 transition hover:bg-emerald-300 focus:outline-none focus:ring-2 focus:ring-emerald-200 focus:ring-offset-2 focus:ring-offset-slate-950"
+            disabled={isSending}
+            className="rounded-2xl bg-emerald-400 p-3 font-semibold text-slate-950 transition hover:bg-emerald-300 focus:outline-none focus:ring-2 focus:ring-emerald-200 focus:ring-offset-2 focus:ring-offset-slate-950 disabled:cursor-not-allowed disabled:opacity-70"
           >
-            Enviar mensaje
+            {isSending ? "Enviando..." : "Enviar mensaje"}
           </button>
 
           <button
             type="button"
             onClick={handleClear}
-            className="rounded-2xl border border-white/10 bg-white/5 px-5 py-3 font-semibold text-slate-100 transition hover:border-sky-400/40 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-sky-200 focus:ring-offset-2 focus:ring-offset-slate-950"
+            disabled={isSending}
+            className="rounded-2xl border border-white/10 bg-white/5 px-5 py-3 font-semibold text-slate-100 transition hover:border-sky-400/40 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-sky-200 focus:ring-offset-2 focus:ring-offset-slate-950 disabled:cursor-not-allowed disabled:opacity-70"
           >
             Limpiar
           </button>
         </div>
 
         <div aria-live="polite" className="min-h-6 text-sm">
-          {submitted && (
-            <p className="text-emerald-300">
-              Se abrió tu cliente de correo con el mensaje preparado.
-            </p>
+          {submitStatus === "success" && <p className="text-emerald-300">{statusMessage}</p>}
+          {submitStatus === "error" && (
+            <p className="text-rose-300">{statusMessage}</p>
           )}
-          {!submitted && isFormValid && (
+          {submitStatus === "idle" && isFormValid && (
             <p className="text-sky-300">Formulario listo para enviar por correo.</p>
           )}
         </div>
