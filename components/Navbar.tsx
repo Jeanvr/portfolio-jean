@@ -115,6 +115,12 @@ const Navbar = () => {
 
       animateHeader(window.scrollY > 24);
 
+      const handleThemeChange = () => {
+        animateHeader(window.scrollY > 24);
+      };
+
+      window.addEventListener("portfolio-theme-change", handleThemeChange);
+
       const trigger = ScrollTrigger.create({
         trigger: document.body,
         start: "top top-=40",
@@ -123,6 +129,7 @@ const Navbar = () => {
       });
 
       return () => {
+        window.removeEventListener("portfolio-theme-change", handleThemeChange);
         cleanupNavHover();
         cleanupSocialHover();
         trigger.kill();

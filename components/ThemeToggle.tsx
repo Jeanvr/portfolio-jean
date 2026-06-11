@@ -26,6 +26,9 @@ const getPreferredTheme = (): Theme => {
 const applyTheme = (theme: Theme) => {
   document.documentElement.classList.toggle("dark", theme === "dark");
   document.documentElement.style.colorScheme = theme;
+  window.dispatchEvent(
+    new CustomEvent("portfolio-theme-change", { detail: { theme } }),
+  );
 };
 
 const ThemeToggle = () => {
