@@ -46,6 +46,20 @@ export const resolveCommand = (command: string, switchTerminalTheme: (theme: Ter
         "theme    Toggle light/dark mode across the portfolio",
         "terminal-theme matrix|amber|ice|barcelona|default",
         "clear    Reset the terminal output",
+        "Some hidden commands are not listed. Explore the system.",
+      ];
+    case "whoami":
+      return [
+        "Jean Carlo Vega",
+        "IT Developer / Python automation / databases / modern frontend.",
+      ];
+    case "neofetch":
+      return [
+        "Jean OS",
+        "Role: IT Developer",
+        "Stack: Python, SQL, Next.js, Linux",
+        "Location: Barcelona",
+        "Mode: Automating boring stuff",
       ];
     case "about":
       return [
@@ -77,6 +91,49 @@ export const resolveCommand = (command: string, switchTerminalTheme: (theme: Ter
         `GitHub: ${PersonalInfo.githubUrl}`,
         `LinkedIn: ${PersonalInfo.linkedinUrl}`,
       ];
+    case "sudo":
+      return ["Nice try. Try: sudo hire jean"];
+    case "sudo hire jean":
+      return [
+        "Permission granted.",
+        "Jean Vega added to shortlist ✅",
+      ];
+    case "barcelona":
+      return [
+        "Mediterranean developer mode enabled.",
+        "Building useful systems near Barcelona 🌊",
+      ];
+    case "linux":
+      return [
+        "Daily driver mindset loaded.",
+        "Terminal-first, clean scripts, no unnecessary noise.",
+      ];
+    case "python":
+      return [
+        "Automation engine ready.",
+        "Boring repetitive work detected. Scripts recommended.",
+      ];
+    case "coffee":
+      return [
+        "Caffeine level: acceptable.",
+        "Debugging patience restored.",
+      ];
+    case "rm -rf /":
+      return ["Blocked. This portfolio has production safeguards."];
+    case "ls":
+      return [
+        "about.txt",
+        "skills.json",
+        "projects/",
+        "work.log",
+        "contact.md",
+        "garage/",
+        "secrets/",
+      ];
+    case "cat cv.txt":
+      return ["CV route available at /cv"];
+    case "open projects":
+      return ["Projects route available at /my-projects"];
     case "theme": {
       if (typeof window === "undefined") {
         return ["Theme control is available in the browser."];

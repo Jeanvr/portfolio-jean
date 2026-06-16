@@ -61,3 +61,8 @@ export type TerminalSidebarProps = {
 export type TerminalBadgesProps = {
   activeTheme: TerminalThemeConfig;
 };
+
+export type TerminalCommandGuideProps = {
+  activeTheme: TerminalThemeConfig;
+  onRunCommand: (command: string) => void;
+};

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
 import TerminalBadges from "./TerminalBadges";
+import TerminalCommandGuide from "./TerminalCommandGuide";
 import TerminalSidebar from "./TerminalSidebar";
 import TerminalWindow from "./TerminalWindow";
 import { resolveCommand } from "./terminalCommands";
@@ -68,6 +69,11 @@ const TerminalSection = () => {
     setInput("");
   };
 
+  const runGuideCommand = (command: string) => {
+    runCommand(command);
+    inputRef.current?.focus();
+  };
+
   return (
     <section id="jean-os" className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
       <motion.div
@@ -93,6 +99,8 @@ const TerminalSection = () => {
             historyRef={historyRef}
           />
         </div>
+
+        <TerminalCommandGuide activeTheme={activeTheme} onRunCommand={runGuideCommand} />
 
         <TerminalBadges activeTheme={activeTheme} />
       </motion.div>
