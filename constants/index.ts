@@ -18,6 +18,10 @@ export const MainNavLinks = [
     link: "/",
   },
   {
+    name: "Jean OS",
+    link: "/terminal",
+  },
+  {
     name: "Habilidades",
     link: "/my-skills",
   },

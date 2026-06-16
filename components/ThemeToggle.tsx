@@ -41,6 +41,20 @@ const ThemeToggle = () => {
     setTheme(preferredTheme);
     applyTheme(preferredTheme);
     setMounted(true);
+
+    const handleThemeChange = (event: Event) => {
+      const nextTheme = (event as CustomEvent<{ theme?: Theme }>).detail?.theme;
+
+      if (nextTheme === "light" || nextTheme === "dark") {
+        setTheme(nextTheme);
+      }
+    };
+
+    window.addEventListener("portfolio-theme-change", handleThemeChange);
+
+    return () => {
+      window.removeEventListener("portfolio-theme-change", handleThemeChange);
+    };
   }, []);
 
   const toggleTheme = () => {
