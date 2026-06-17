@@ -1,7 +1,7 @@
 import { PersonalInfo } from "@/constants";
 
 import { terminalThemes, isTerminalTheme } from "./terminalThemes";
-import type { TerminalTheme, Theme } from "./types";
+import type { TerminalResponse, TerminalTheme, Theme } from "./types";
 
 export const getCurrentTheme = (): Theme => {
   if (typeof document === "undefined") {
@@ -22,7 +22,10 @@ export const applyNextTheme = () => {
   return nextTheme;
 };
 
-export const resolveCommand = (command: string, switchTerminalTheme: (theme: TerminalTheme) => string[]) => {
+export const resolveCommand = (
+  command: string,
+  switchTerminalTheme: (theme: TerminalTheme) => string[],
+): TerminalResponse => {
   const [baseCommand, argument] = command.split(/\s+/, 2);
 
   if ((baseCommand === "theme" || baseCommand === "terminal-theme") && argument) {
@@ -45,6 +48,7 @@ export const resolveCommand = (command: string, switchTerminalTheme: (theme: Ter
         "contact  Print reliable contact channels",
         "theme    Toggle light/dark mode across the portfolio",
         "terminal-theme matrix|amber|ice|barcelona|default",
+        "Personal modes: garage, moto, car",
         "clear    Reset the terminal output",
         "Some hidden commands are not listed. Explore the system.",
       ];
@@ -108,6 +112,13 @@ export const resolveCommand = (command: string, switchTerminalTheme: (theme: Ter
         "Daily driver mindset loaded.",
         "Terminal-first, clean scripts, no unnecessary noise.",
       ];
+    case "garage":
+      return { type: "garage", variant: "overview" };
+    case "moto":
+      return { type: "garage", variant: "moto" };
+    case "car":
+    case "coche":
+      return { type: "garage", variant: "car" };
     case "python":
       return [
         "Automation engine ready.",

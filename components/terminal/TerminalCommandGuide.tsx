@@ -64,6 +64,8 @@ const guideCommands = [
   },
 ];
 
+const garageCommands = ["garage", "moto", "car / coche"];
+
 const TerminalCommandGuide = ({ activeTheme, onRunCommand }: TerminalCommandGuideProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -99,7 +101,29 @@ const TerminalCommandGuide = ({ activeTheme, onRunCommand }: TerminalCommandGuid
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.24, ease: "easeOut" }}
           >
-            <div className="grid gap-2 border-t border-white/10 p-3 sm:grid-cols-2 sm:p-4 xl:grid-cols-3">
+            <div className="border-t border-white/10 p-3 sm:p-4">
+              <div className="mb-3 rounded-2xl border border-amber-200/15 bg-amber-300/[0.06] p-3">
+                <p className="font-mono text-xs font-semibold uppercase tracking-[0.24em] text-amber-100">Garage mode</p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {garageCommands.map((command) => {
+                    const runnableCommand = command === "car / coche" ? "car" : command;
+
+                    return (
+                      <button
+                        key={command}
+                        type="button"
+                        onClick={() => handleCommandClick(runnableCommand)}
+                        className={activeTheme.chip}
+                      >
+                        {command}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            <div className="grid gap-2 px-3 pb-3 sm:grid-cols-2 sm:px-4 sm:pb-4 xl:grid-cols-3">
               {guideCommands.map((item) => (
                 <button
                   key={item.command}

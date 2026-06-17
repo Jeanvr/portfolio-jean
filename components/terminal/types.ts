@@ -4,10 +4,19 @@ import type { LucideIcon } from "lucide-react";
 export type Theme = "light" | "dark";
 export type TerminalTheme = "default" | "matrix" | "amber" | "ice" | "barcelona";
 
+export type GarageVariant = "overview" | "moto" | "car";
+
+export type TerminalRichResponse = {
+  type: "garage";
+  variant: GarageVariant;
+};
+
+export type TerminalResponse = string[] | TerminalRichResponse;
+
 export type TerminalLine = {
   id: number;
   command?: string;
-  response: string[];
+  response: TerminalResponse;
 };
 
 export type TerminalThemeConfig = {

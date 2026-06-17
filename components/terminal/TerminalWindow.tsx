@@ -1,6 +1,7 @@
 import type { FormEvent } from "react";
 
 import { commandChips, PROMPT } from "./terminalContent";
+import TerminalGaragePanel from "./TerminalGaragePanel";
 import type { TerminalWindowProps } from "./types";
 
 const TerminalWindow = ({
@@ -62,11 +63,15 @@ const TerminalWindow = ({
                 <span className={activeTheme.prompt}>{PROMPT}</span> {line.command}
               </p>
             ) : null}
-            {line.response.map((responseLine) => (
-              <p key={`${line.id}-${responseLine}`} className={activeTheme.response}>
-                {responseLine}
-              </p>
-            ))}
+            {Array.isArray(line.response) ? (
+              line.response.map((responseLine) => (
+                <p key={`${line.id}-${responseLine}`} className={activeTheme.response}>
+                  {responseLine}
+                </p>
+              ))
+            ) : (
+              <TerminalGaragePanel variant={line.response.variant} />
+            )}
           </div>
         ))}
       </div>
